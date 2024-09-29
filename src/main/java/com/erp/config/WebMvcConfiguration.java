@@ -182,25 +182,25 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 //        return filterMultipartResolver;
 //    }
 //
-    @Bean(name = "multipartResolver")
-    public CommonsMultipartResolver multipartResolver() {
-        CommonsMultipartResolver resolver = new CommonsMultipartResolver();
-        resolver.setDefaultEncoding("utf-8");
-        resolver.setMaxUploadSize(10000000);
-        resolver.setMaxInMemorySize(10000000);
-        try {
-            resolver.setUploadTempDir(fileSystemResource());
-        } catch (IOException e) {
-            log.error("uploadTempDir setting error.. {} | {}", e, e.getMessage());
-        }
-        return resolver;
-    }
-
-    @Bean
-    public FileSystemResource fileSystemResource() {
-        String path = "/usr/local/erp/www/upload/";
-        FileSystemResource uploadDirResource = new FileSystemResource(path);
-        return uploadDirResource;
-    }
+//    @Bean(name = "multipartResolver")
+//    public CommonsMultipartResolver multipartResolver() {
+//        CommonsMultipartResolver resolver = new CommonsMultipartResolver();
+//        resolver.setDefaultEncoding("utf-8");
+//        resolver.setMaxUploadSize(10000000);
+//        resolver.setMaxInMemorySize(10000000);
+//        try {
+//            resolver.setUploadTempDir(fileSystemResource());
+//        } catch (IOException e) {
+//            log.error("uploadTempDir setting error.. {} | {}", e, e.getMessage());
+//        }
+//        return resolver;
+//    }
+//
+//    @Bean
+//    public FileSystemResource fileSystemResource() {
+//        String path = "/usr/local/erp/www/upload/";
+//        FileSystemResource uploadDirResource = new FileSystemResource(path);
+//        return uploadDirResource;
+//    }
 
 }
