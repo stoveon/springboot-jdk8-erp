@@ -129,15 +129,15 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         configurer.enable();
     }
 
-    @Override
-    public void configureViewResolvers(ViewResolverRegistry registry) {
-        InternalResourceViewResolver bean = new InternalResourceViewResolver();
-        bean.setViewClass(JstlView.class);
-        bean.setCache(true);
-        bean.setPrefix("/WEB-INF/views/");
-        bean.setSuffix(".jsp");
-        registry.viewResolver(bean);
-    }
+//    @Override
+//    public void configureViewResolvers(ViewResolverRegistry registry) {
+//        InternalResourceViewResolver bean = new InternalResourceViewResolver();
+//        bean.setViewClass(JstlView.class);
+//        bean.setCache(true);
+//        bean.setPrefix("/WEB-INF/views/");
+//        bean.setSuffix(".jsp");
+//        registry.viewResolver(bean);
+//    }
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
