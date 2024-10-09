@@ -7,10 +7,11 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.CacheControl;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
@@ -22,8 +23,9 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
-@EnableWebMvc
+//@EnableWebMvc
 @Configuration
+@ComponentScan
 public class WebMvcConfiguration implements WebMvcConfigurer {
 
     ///////////////////////////////////////////////////////////////////////////
@@ -125,8 +127,13 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 ///////////////////////////////////////////////////////////////////////////
 
     @Override
-    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
-        configurer.enable();
+    public void configureViewResolvers(ViewResolverRegistry registry) {
+        InternalResourceViewResolver bean = new InternalResourceViewResolver();
+        bean.setViewClass(JstlView.class);
+        bean.setCache(true);
+        bean.setPrefix("/WEB-INF/views/");
+        bean.setSuffix(".jsp");
+        registry.viewResolver(bean);
     }
 
 //    @Override
@@ -175,26 +182,26 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     }
 
 
-    //    @Bean(value = "filterMultipartResolver")
-//    public MultipartResolver filterMultipartResolver() {
-//        CommonsMultipartResolver filterMultipartResolver = new CommonsMultipartResolver();
-//        filterMultipartResolver.setDefaultEncoding("UTF-8");
-//        return filterMultipartResolver;
-//    }
-//
-//    @Bean(name = "multipartResolver")
-//    public CommonsMultipartResolver multipartResolver() {
-//        CommonsMultipartResolver resolver = new CommonsMultipartResolver();
-//        resolver.setDefaultEncoding("utf-8");
-//        resolver.setMaxUploadSize(10000000);
-//        resolver.setMaxInMemorySize(10000000);
+    @Bean(value = "filterMultipartResolver")
+    public MultipartResolver filterMultipartResolver() {
+        CommonsMultipartResolver filterMultipartResolver = new CommonsMultipartResolver();
+        filterMultipartResolver.setDefaultEncoding("UTF-8");
+        return filterMultipartResolver;
+    }
+
+    @Bean(name = "multipartResolver")
+    public CommonsMultipartResolver multipartResolver() {
+        CommonsMultipartResolver resolver = new CommonsMultipartResolver();
+        resolver.setDefaultEncoding("utf-8");
+        resolver.setMaxUploadSize(10000000);
+        resolver.setMaxInMemorySize(10000000);
 //        try {
 //            resolver.setUploadTempDir(fileSystemResource());
 //        } catch (IOException e) {
 //            log.error("uploadTempDir setting error.. {} | {}", e, e.getMessage());
 //        }
-//        return resolver;
-//    }
+        return resolver;
+    }
 //
 //    @Bean
 //    public FileSystemResource fileSystemResource() {
