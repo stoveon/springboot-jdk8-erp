@@ -31,7 +31,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
 //        WebMvcConfigurer.super.addCorsMappings(registry);
         registry.addMapping("/**")
-                .allowedOrigins("*")
+                .allowedOriginPatterns("*")
                 .allowedMethods(new String[]{"GET", "POST", "PATCH", "PUT", "DELETE"})
                 .allowCredentials(true)
         ;
@@ -109,8 +109,8 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     public SimpleMappingExceptionResolver getExceptionResolver() {
         SimpleMappingExceptionResolver smer = new SimpleMappingExceptionResolver();
 
-        smer.setDefaultErrorView("etc/Exception");
-        smer.setExceptionAttribute(SimpleMappingExceptionResolver.DEFAULT_EXCEPTION_ATTRIBUTE);
+//        smer.setDefaultErrorView("etc/Exception");
+//        smer.setExceptionAttribute(SimpleMappingExceptionResolver.DEFAULT_EXCEPTION_ATTRIBUTE);
 
 //        Properties prop = new Properties();
 //        prop.setProperty("com.erp.exception.LoginFailException", "login/LoginFailed");
