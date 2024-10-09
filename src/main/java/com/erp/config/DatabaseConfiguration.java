@@ -2,26 +2,27 @@ package com.erp.config;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.context.annotation.*;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 
+@Slf4j
 @Configuration
 @EnableTransactionManagement
-@PropertySource("classpath:/database.properties")
+@PropertySources({
+        @PropertySource("classpath:/database.properties"),
+})
 public class DatabaseConfiguration {
 
     @Autowired
@@ -35,10 +36,24 @@ public class DatabaseConfiguration {
     }
 
     @Bean
+    @Primary
+    @ConfigurationProperties(prefix = "spring.datasource")
     public DataSource dataSource() throws Exception {
         // HikariDataSource를 사용하기 위해 Hikari 설정 객체를 생성자로 넣은 HikariDataSource 객체 반환
-        DataSource dataSource = new HikariDataSource(hikariConfig());
-        return dataSource;
+        HikariDataSource hikariDataSource = new HikariDataSource(hikariConfig());
+
+
+        String var1 = hikariDataSource.getJdbcUrl();
+        String var2 = hikariDataSource.getDriverClassName();
+        String var3 = hikariDataSource.getUsername();
+        String var4 = hikariDataSource.getPassword();
+
+        log.debug(var1);
+        log.debug(var2);
+        log.debug(var3 + "  |  " + var4);
+
+        log.debug(hikariDataSource.toString());
+        return hikariDataSource;
     }
 
     /**
@@ -58,8 +73,10 @@ public class DatabaseConfiguration {
         sqlSessionFactoryBean.setDataSource(dataSource); // 데이터 소스 설정
 
         // MyBatis 설정 파일 위치 지정
-        sqlSessionFactoryBean.setConfigLocation(new ClassPathResource("mybatis/mybatis-config.xml"));
-        sqlSessionFactoryBean.setMapperLocations(new ClassPathResource("mybatis/mapper/*.xml"));
+//        sqlSessionFactoryBean.setConfigLocation(applicationContext.getResource("classpath:/mybatis/mybatis-config.xml"));
+//        sqlSessionFactoryBean.setMapperLocations(applicationContext.getResources("classpath:/mybatis/mapper/**/*.xml"));
+        sqlSessionFactoryBean.setConfigLocation(new PathMatchingResourcePatternResolver().getResource("classpath:/mybatis/mybatis-config.xml"));
+        sqlSessionFactoryBean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:/mybatis/mapper/**/*.xml"));
         sqlSessionFactoryBean.setTypeAliasesPackage("com.erp");
         return sqlSessionFactoryBean.getObject(); // SqlSessionFactory 반환
     }
