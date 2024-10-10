@@ -1,7 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration>
+<configuration scan="true" scanPeriod="30 seconds">
     <!-- log 기록 절대 위치 설정 -->
-    <property name="LOG_HOME" value="${user.home}/logs/sample"/>
+    <property name="LOG_HOME" value="${user.home}/logs/erp" />
+    <property name="LOG_PATH_NAME" value="${LOG_HOME}/erp_web.log"/>
+    <property name="LOG_PATH_NAME_DEBUG" value="${LOG_HOME}/erp_debug.log"/>
+    <property name="LOG_PATH_NAME_ERROR" value="${LOG_HOME}/erp_error.log"/>
+
+    <property name="LOG_LEVEL" value="INFO" />
+    <property name="LOG_LEVEL_SQL" value="WARN"/>
+    <property name="LOG_LEVEL_JDBC" value="WARN"/>
+    <property name="LOG_LEVEL_TOMCAT" value="WARN"/>
+    <property name="LOG_LEVEL_SPRING" value="WARN" />
+    <property name="LOG_LEVEL_ROOT" value="WARN" />
+
+    <property name="LOG_MAX_HISTORY" value="8"/>
+    <property name="LOG_MAX_FILE_SIZE" value="64MB"/>
 
     <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
     <conversionRule conversionWord="wex"
@@ -15,49 +28,133 @@
     <property name="FILE_LOG_PATTERN"
               value="[%d{yyyy-MM-dd HH:mm:ss}:%-3relative] %-5level ${PID:-} --- [%15.15thread] %-40.40logger{36} : %msg%n"/>
 
+    <property name="LEVEL_FILTER_ONMATCH" value="ACCEPT"/>
+    <property name="LEVEL_FILTER_ONMISMATCH" value="DENT"/>
+
     <!-- 콘솔(STDOUT) -->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>DEBUG</level>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>WARN</level>
+            <onMatch>${LEVEL_FILTER_ONMATCH}</onMatch>
+            <onMismatch>${LEVEL_FILTER_ONMISMATCH}</onMismatch>
         </filter>
         <encoder>
+            <charset>utf-8</charset>
             <pattern>${CONSOLE_LOG_PATTERN}</pattern>
         </encoder>
     </appender>
 
     <!-- 파일(FILE) -->
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <!--     log 기록할 파일 위치 설정 -->
-        <file>${LOG_HOME}/web.log</file>
-        <!--     log 기록 타입 인코딩 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>${LEVEL_FILTER_ONMATCH}</onMatch>
+            <onMismatch>${LEVEL_FILTER_ONMISMATCH}</onMismatch>
+        </filter>
+        <file>${LOG_PATH_NAME}</file>
+        <!-- 일자별로 로그파일 적용하기 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH_NAME}.%d{yyyy-MM-dd}</fileNamePattern>
+            <maxHistory>${LOG_MAX_HISTORY}</maxHistory> <!-- 일자별 백업파일의 보관기간 -->
+            <maxFileSize>${LOG_MAX_FILE_SIZE}</maxFileSize> <!-- 일자별 백업파일의 보관기간 -->
+        </rollingPolicy>
         <encoder>
+            <charset>utf-8</charset>
             <pattern>${FILE_LOG_PATTERN}</pattern>
         </encoder>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!-- daily rollover -->
-            <fileNamePattern>${LOG_HOME}/entrance_web.%d{yyyy-MM-dd}.log</fileNamePattern>
-            <!-- keep 30 days' worth of history capped at 3GB total size -->
-            <maxHistory>30</maxHistory>
-            <totalSizeCap>3GB</totalSizeCap>
-        </rollingPolicy>
     </appender>
 
-    <!-- log 레벨 설정 (logging.level.root=info)-->
+    <appender name="DEBUG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>DEBUG</level>
+            <onMatch>${LEVEL_FILTER_ONMATCH}</onMatch>
+            <onMismatch>${LEVEL_FILTER_ONMISMATCH}</onMismatch>
+        </filter>
+        <!-- 일자별로 로그파일 적용하기 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH_NAME_DEBUG}.%d{yyyy-MM-dd}</fileNamePattern>
+            <maxHistory>${LOG_MAX_HISTORY}</maxHistory> <!-- 일자별 백업파일의 보관기간 -->
+            <maxFileSize>${LOG_MAX_FILE_SIZE}</maxFileSize>
+        </rollingPolicy>
+        <encoder>
+            <charset>utf-8</charset>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
 
-    <logger name="com.sample" level="info">
-        <!--        <appender-ref ref="STDOUT"/>-->
+    <appender name="ERROR"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>${LEVEL_FILTER_ONMATCH}</onMatch>
+            <onMismatch>${LEVEL_FILTER_ONMISMATCH}</onMismatch>
+        </filter>
+        <file>${LOG_PATH_NAME_ERROR}</file>
+        <!-- 일자별로 로그파일 적용하기 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH_NAME_ERROR}.%d{yyyy-MM-dd}</fileNamePattern>
+            <maxHistory>${LOG_MAX_HISTORY}</maxHistory> <!-- 일자별 백업파일의 보관기간 -->
+            <maxFileSize>${LOG_MAX_FILE_SIZE}</maxFileSize>
+        </rollingPolicy>
+        <encoder>
+            <charset>utf-8</charset>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- query logging -->
+    <logger name="erp.mybatis.sql" level="${LOG_LEVEL_SQL}" additivity="false">
+<!--        <appender-ref ref="STDOUT"/>-->
+<!--        <appender-ref ref="DEBUG"/>-->
         <appender-ref ref="FILE"/>
+        <appender-ref ref="ERROR"/>
     </logger>
 
-    <root level="debug">
-        <!--     참조할 appender 설정 - STDOUT -->
-        <!--        <appender-ref ref="STDOUT"/>-->
-        <!--        <appender-ref ref="FILE"/>-->
+    <logger name="com.erp" level="${LOG_LEVEL}" additivity="false">
+<!--        <appender-ref ref="STDOUT" />-->
+        <appender-ref ref="DEBUG" />
+        <appender-ref ref="FILE" />
+        <appender-ref ref="ERROR" />
+    </logger>
+
+    <!-- jdbc logging -->
+    <logger name="java.sql" level="${LOG_LEVEL_JDBC}" additivity="false">
+<!--        <appender-ref ref="STDOUT"/>-->
+<!--        <appender-ref ref="DEBUG"/>-->
+<!--        <appender-ref ref="FILE"/>-->
+    </logger>
+    <logger name="org.mybatis.spring" level="${LOG_LEVEL_JDBC}" additivity="false">
+<!--        <appender-ref ref="STDOUT"/>-->
+<!--        <appender-ref ref="DEBUG"/>-->
+<!--        <appender-ref ref="FILE"/>-->
+    </logger>
+    <logger name="org.apache.ibatis" level="${LOG_LEVEL_JDBC}" additivity="false">
+<!--        <appender-ref ref="STDOUT"/>-->
+<!--        <appender-ref ref="DEBUG"/>-->
+<!--        <appender-ref ref="FILE"/>-->
+    </logger>
+
+    <!-- Tomcat logging -->
+    <logger name="org.apache" level="${LOG_LEVEL_TOMCAT}" additivity="false">
+<!--        <appender-ref ref="STDOUT"/>-->
+<!--        <appender-ref ref="DEBUG"/>-->
+<!--        <appender-ref ref="FILE"/>-->
+        <appender-ref ref="ERROR" />
+    </logger>
+
+    <!-- Spring logging -->
+    <logger name="org.springframework" level="${LOG_LEVEL_SPRING}" additivity="false">
+<!--        <appender-ref ref="STDOUT" />-->
+<!--        <appender-ref ref="DEBUG" />-->
+        <appender-ref ref="FILE" />
+        <appender-ref ref="ERROR" />
+    </logger>
+
+    <root level="${LOG_LEVEL_ROOT}">
+<!--        <appender-ref ref="STDOUT" />-->
+<!--        <appender-ref ref="DEBUG" />-->
+<!--        <appender-ref ref="FILE" />-->
+<!--        <appender-ref ref="ERROR" />-->
     </root>
-
-    <!-- log 레벨 설정 (org.springframework.web=debug)-->
-    <logger name="org.springframework.web" level="info">
-        <appender-ref ref="FILE"/>
-    </logger>
 
 </configuration>
