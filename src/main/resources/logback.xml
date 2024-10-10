@@ -13,7 +13,7 @@
     <property name="LOG_LEVEL_SPRING" value="WARN" />
     <property name="LOG_LEVEL_ROOT" value="WARN" />
 
-    <property name="LOG_MAX_HISTORY" value="8"/>
+    <property name="LOG_MAX_HISTORY" value="5"/>
     <property name="LOG_MAX_FILE_SIZE" value="64MB"/>
 
     <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
@@ -53,8 +53,8 @@
         </filter>
         <file>${LOG_PATH_NAME}</file>
         <!-- 일자별로 로그파일 적용하기 -->
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_PATH_NAME}.%d{yyyy-MM-dd}</fileNamePattern>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH_NAME}.%d{yyyy-MM-dd}.%i</fileNamePattern>
             <maxHistory>${LOG_MAX_HISTORY}</maxHistory> <!-- 일자별 백업파일의 보관기간 -->
             <maxFileSize>${LOG_MAX_FILE_SIZE}</maxFileSize> <!-- 일자별 백업파일의 보관기간 -->
         </rollingPolicy>
@@ -71,8 +71,8 @@
             <onMismatch>${LEVEL_FILTER_ONMISMATCH}</onMismatch>
         </filter>
         <!-- 일자별로 로그파일 적용하기 -->
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_PATH_NAME_DEBUG}.%d{yyyy-MM-dd}</fileNamePattern>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH_NAME_DEBUG}.%d{yyyy-MM-dd}.%i</fileNamePattern>
             <maxHistory>${LOG_MAX_HISTORY}</maxHistory> <!-- 일자별 백업파일의 보관기간 -->
             <maxFileSize>${LOG_MAX_FILE_SIZE}</maxFileSize>
         </rollingPolicy>
@@ -91,8 +91,8 @@
         </filter>
         <file>${LOG_PATH_NAME_ERROR}</file>
         <!-- 일자별로 로그파일 적용하기 -->
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_PATH_NAME_ERROR}.%d{yyyy-MM-dd}</fileNamePattern>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH_NAME_ERROR}.%d{yyyy-MM-dd}.%i</fileNamePattern>
             <maxHistory>${LOG_MAX_HISTORY}</maxHistory> <!-- 일자별 백업파일의 보관기간 -->
             <maxFileSize>${LOG_MAX_FILE_SIZE}</maxFileSize>
         </rollingPolicy>
