@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.CacheControl;
+import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
@@ -19,9 +20,15 @@ import org.springframework.web.servlet.view.BeanNameViewResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
-import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * <pre>
+ *     spring MVC 관련된 설정을 하는 클래스
+ * </pre>
+ */
 @Slf4j
 //@EnableWebMvc
 @Configuration
@@ -34,8 +41,37 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 //        WebMvcConfigurer.super.addCorsMappings(registry);
         registry.addMapping("/**")
                 .allowedOriginPatterns("*")
-                .allowedMethods(new String[]{"GET", "POST", "PATCH", "PUT", "DELETE"})
+                .allowedMethods("GET", "POST", "PATCH", "PUT", "DELETE")
+                .allowedHeaders("*")
                 .allowCredentials(true)
+        ;
+    }
+
+    /**
+     * <pre>
+     *     컨텐츠 유형을 확인하고 적절한 ViewResolver를 찾기 위한 컨텐츠 협상(content Negotiation)이라고 함.
+     * </pre>
+     *
+     * @param configurer
+     */
+    @Override
+    public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
+        Map<String, MediaType> mediaTypes = new HashMap<>();
+        mediaTypes.put("text", MediaType.TEXT_PLAIN);
+        mediaTypes.put("html", MediaType.TEXT_HTML);
+        mediaTypes.put("pdf", MediaType.valueOf("application/json"));
+        mediaTypes.put("xls", MediaType.valueOf("application/vnd.ms-excel"));
+        mediaTypes.put("xml", MediaType.APPLICATION_XML);
+        mediaTypes.put("json", MediaType.APPLICATION_JSON);
+
+        configurer
+                // 컨텐츠 협상 기능을 사용하기 위한 URI 파라미터명을 mediaType 으로 설정
+//                .parameterName("mediaType")
+                // 기본 정책인 header의 Content-Type을 우선적용하지 않도록 함.
+//                .ignoreAcceptHeader(true)
+                // 컨텐츠 협상 과정에서 적합한 값을 찾지 못하면 기본값 application/json 으로 설정
+                .defaultContentType(MediaType.APPLICATION_JSON)
+                .mediaTypes(mediaTypes)
         ;
     }
 
@@ -74,7 +110,6 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        // WebMvcConfigurer.super.addInterceptors(registry);
 
         registry.addInterceptor(noCacheInterceptor())
                 .addPathPatterns(notAuthenticationHandlerMapping)
@@ -136,27 +171,10 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         registry.viewResolver(bean);
     }
 
-//    @Override
-//    public void configureViewResolvers(ViewResolverRegistry registry) {
-//        InternalResourceViewResolver bean = new InternalResourceViewResolver();
-//        bean.setViewClass(JstlView.class);
-//        bean.setCache(true);
-//        bean.setPrefix("/WEB-INF/views/");
-//        bean.setSuffix(".jsp");
-//        registry.viewResolver(bean);
-//    }
-
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-
         CacheControl control = CacheControl.maxAge(1, TimeUnit.DAYS).cachePublic();
-
-//        registry.addResourceHandler("/static/css/**").addResourceLocations("classpath:/static/css/").setCacheControl(control);
-//        registry.addResourceHandler("/static/font/**").addResourceLocations("classpath:/static/font/").setCacheControl(control);
-//        registry.addResourceHandler("/static/help/**").addResourceLocations("classpath:/static/help/").setCacheControl(control);
-//        registry.addResourceHandler("/static/img/**").addResourceLocations("classpath:/static/img/").setCacheControl(control);
-//        registry.addResourceHandler("/static/js/**").addResourceLocations("classpath:/static/js/").setCacheControl(control);
-
+        registry.addResourceHandler("/static").addResourceLocations("classpath:/static/").setCacheControl(control);
         WebMvcConfigurer.super.addResourceHandlers(registry);
     }
 
