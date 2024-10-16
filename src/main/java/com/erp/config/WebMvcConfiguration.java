@@ -45,9 +45,9 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     };
 
     final String[] excludeResourcePatterns = {
-            "static/**",
-            "resources/**",
-            "resource/**",
+            "/static/**",
+            "/resources/**",
+            "/resource/**",
             "**/favicon.ico",
     };
 
@@ -148,15 +148,8 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-
         CacheControl control = CacheControl.maxAge(1, TimeUnit.DAYS).cachePublic();
-
-//        registry.addResourceHandler("/static/css/**").addResourceLocations("classpath:/static/css/").setCacheControl(control);
-//        registry.addResourceHandler("/static/font/**").addResourceLocations("classpath:/static/font/").setCacheControl(control);
-//        registry.addResourceHandler("/static/help/**").addResourceLocations("classpath:/static/help/").setCacheControl(control);
-//        registry.addResourceHandler("/static/img/**").addResourceLocations("classpath:/static/img/").setCacheControl(control);
-//        registry.addResourceHandler("/static/js/**").addResourceLocations("classpath:/static/js/").setCacheControl(control);
-
+        registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/").setCacheControl(control);
         WebMvcConfigurer.super.addResourceHandlers(registry);
     }
 
