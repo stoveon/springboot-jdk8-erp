@@ -19,11 +19,10 @@ import org.springframework.web.servlet.view.BeanNameViewResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
-//@EnableWebMvc
+@EnableWebMvc
 @Configuration
 @ComponentScan
 public class WebMvcConfiguration implements WebMvcConfigurer {
@@ -149,6 +148,9 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         CacheControl control = CacheControl.maxAge(1, TimeUnit.DAYS).cachePublic();
+        registry.addResourceHandler("/static/js/**").addResourceLocations("classpath:/static/js/").setCacheControl(control);
+        registry.addResourceHandler("/static/css/**").addResourceLocations("classpath:/static/css/").setCacheControl(control);
+        registry.addResourceHandler("/static/vendor/**").addResourceLocations("classpath:/static/vendor/").setCacheControl(control);
         registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/").setCacheControl(control);
         WebMvcConfigurer.super.addResourceHandlers(registry);
     }
@@ -173,7 +175,6 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
         return objectMapper;
     }
-
 
     @Bean(value = "filterMultipartResolver")
     public MultipartResolver filterMultipartResolver() {
