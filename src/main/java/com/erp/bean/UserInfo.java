@@ -11,7 +11,7 @@ import java.util.Date;
 @ToString
 public class UserInfo {
 
-    private int id;
+    private int sid;
 
     private String loginId;
 
