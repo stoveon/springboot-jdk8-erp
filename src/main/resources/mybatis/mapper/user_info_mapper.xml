@@ -3,8 +3,80 @@
 
 <mapper namespace="com.erp.mapper.UserInfoMapper">
 
-    <select id="now">
-        select now();
+    <sql id="searchWhere">
+        <if test='searchValue != null and searchValue != ""'>
+            <where>
+                <choose>
+                    <when test='searchKey != null and searchKey == 1'>
+                        login_id ILIKE '%' || #{searchVlue} || '%'
+                    </when>
+                </choose>
+            </where>
+        </if>
+    </sql>
+
+    <sql id="desc">
+        ORDER BY
+        <choose>
+            <when test='sortIndex != null and sortIndex != ""'>
+
+            </when>
+            <otherwise>
+
+            </otherwise>
+        </choose>
+    </sql>
+
+    <insert id="insertUserInfo" parameterType="com.erp.bean.UserInfo" useGeneratedKeys="true" keyProperty="sid"
+            keyColumn="seq">
+        INSERT INTO user_info(login_id, password, name, email, address, phone_number, created_at, updated_at)
+        VALUES (#{loginId}, #{password}, #{name}, #{email}, #{address}, #{phoneNumber}, now(), now())
+        ;
+    </insert>
+
+    <update id="updateUserInfoBySid" parameterType="com.erp.bean.UserInfo">
+        UPDATE user_info
+        SET
+        <if test='password != null and password != ""'>
+            password = #{passwpord},
+        </if>
+        <if test='name != null and name != ""'>
+            name = #{name},
+        </if>
+        <if test='email != null and email != ""'>
+            email = #{email},
+        </if>
+        <if test='address != null and address != ""'>
+            address = #{address},
+        </if>
+        <if test='phoneNumber != null and phoneNumber != ""'>
+            phone_number = #{phoneNumber},
+        </if>
+        updated_at = now()
+        WHERE sid = #{sid}
+        ;
+    </update>
+
+    <select id="checkExistUserInfoToLoginId">
+        SELECT seq,
+               login_id,
+               password,
+               name,
+               email,
+               address,
+               phone_number,
+               created_at,
+               updated_at
+        FROM user_info
+        WHERE login_id = #{loginId}
+          AND seq != ${seq}
+    </select>
+
+    <select id="selectUserInfo">
+        SELECT seq, login_id, password, name, email, address, phone_number, created_at, updated_at
+        FROM user_info
+        <if test='limit != null and limit != ""'>LIMIT #{limit}</if>
+        <if test='offset != null and offset != ""'>OFFSET #{offset}</if>
     </select>
 
 </mapper>
