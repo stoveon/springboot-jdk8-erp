@@ -10,6 +10,21 @@
                     <when test='searchKey != null and searchKey == 1'>
                         login_id ILIKE '%' || #{searchVlue} || '%'
                     </when>
+                    <when test='searchKey != null and searchKey == 2'>
+                        name ILIKE '%' || #{searchVlue} || '%'
+                    </when>
+                    <when test='searchKey != null and searchKey == 3'>
+                        email ILIKE '%' || #{searchVlue} || '%'
+                    </when>
+                    <when test='searchKey != null and searchKey == 4'>
+                        address ILIKE '%' || #{searchVlue} || '%'
+                    </when>
+                    <when test='searchKey != null and searchKey == 5'>
+                        phone_number ILIKE '%' || #{searchVlue} || '%'
+                    </when>
+                    <when test='searchKey != null and searchKey == 6'>
+                        date_format((created_at, '%Y-%m-%d') = #{searchVlue}
+                    </when>
                 </choose>
             </where>
         </if>
@@ -18,17 +33,39 @@
     <sql id="desc">
         ORDER BY
         <choose>
-            <when test='sortIndex != null and sortIndex != ""'>
-
+            <when test='sortIndex != null and sortIndex == 1'>
+                login_id
+                <if test="desc">desc</if>
+            </when>
+            <when test='sortIndex != null and sortIndex == 2'>
+                name
+                <if test="desc">desc</if>
+            </when>
+            <when test='sortIndex != null and sortIndex == 3'>
+                email
+                <if test="desc">desc</if>
+            </when>
+            <when test='sortIndex != null and sortIndex == 4'>
+                address
+                <if test="desc">desc</if>
+            </when>
+            <when test='sortIndex != null and sortIndex == 6'>
+                phone_number
+                <if test="desc">desc</if>
+            </when>
+            <when test='sortIndex != null and sortIndex == 5'>
+                created_at
+                <if test="desc">desc</if>
             </when>
             <otherwise>
-
+                created_at
+                <if test="desc">desc</if>
             </otherwise>
         </choose>
     </sql>
 
     <insert id="insertUserInfo" parameterType="com.erp.bean.UserInfo" useGeneratedKeys="true" keyProperty="sid"
-            keyColumn="seq">
+            keyColumn="sid">
         INSERT INTO user_info(login_id, password, name, email, address, phone_number, created_at, updated_at)
         VALUES (#{loginId}, #{password}, #{name}, #{email}, #{address}, #{phoneNumber}, now(), now())
         ;
@@ -57,8 +94,8 @@
         ;
     </update>
 
-    <select id="checkExistUserInfoToLoginId">
-        SELECT seq,
+    <select id="checkExistUserInfoToLoginId" parameterType="com.erp.bean.UserInfo">
+        SELECT sid,
                login_id,
                password,
                name,
@@ -69,14 +106,25 @@
                updated_at
         FROM user_info
         WHERE login_id = #{loginId}
-          AND seq != ${seq}
+          AND sid != ${sid}
     </select>
 
-    <select id="selectUserInfo">
-        SELECT seq, login_id, password, name, email, address, phone_number, created_at, updated_at
+    <select id="selectUserInfo" parameterType="com.erp.bean.search.UserInfoSearch">
+        SELECT sid, login_id, password, name, email, address, phone_number, created_at, updated_at
         FROM user_info
+        <include refid="searchWhere"/>
+        <include refid="desc"/>
         <if test='limit != null and limit != ""'>LIMIT #{limit}</if>
         <if test='offset != null and offset != ""'>OFFSET #{offset}</if>
+    </select>
+
+    <select id="selectUserInfoCount" parameterType="com.erp.bean.search.UserInfoSearch">
+        SELECT count(*)
+        FROM (
+        SELECT sid, login_id, password, name, email, address, phone_number, created_at, updated_at
+        FROM user_info
+        <include refid="searchWhere"/>
+        )
     </select>
 
 </mapper>
