@@ -1,0 +1,83 @@
+@font-face {
+    font-family: sans-serif;
+    src: url("./SansSerifFLF.otf") format("opentype");
+    font-weight: 200;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: sans-serif;
+    src: url("./SansSerifFLF-Italic.otf") format("opentype");
+    font-weight: 200;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: sans-serif;
+    src: url("./SansSerifBookFLF.otf") format("opentype");
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: sans-serif;
+    src: url("./SansSerifBookFLF-Italic.otf") format("opentype");
+    font-weight: 300;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: sans-serif;
+    src: url("./SansSerifFLF-Demibold.otf") format("opentype");
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: sans-serif;
+    src: url("./SansSerifFLF-DemiItalic.otf") format("opentype");
+    font-weight: 400;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: sans-serif;
+    src: url("./SansSerifBldFLF.otf") format("opentype");
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: sans-serif;
+    src: url("./SansSerifBldFLF-Italic.otf") format("opentype");
+    font-weight: 500;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: sans-serif;
+    src: url("./SansSerifExbFLFCond.otf") format("opentype");
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: sans-serif;
+    src: url("./SansSerifExbFLFCond-Italic.otf") format("opentype");
+    font-weight: 600;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: sans-serif;
+    src: url("./SansSerifExbFLF.otf") format("opentype");
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: sans-serif;
+    src: url("./SansSerifExbFLF-Italic.otf") format("opentype");
+    font-weight: 700;
+    font-style: italic;
+}
