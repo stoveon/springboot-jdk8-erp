@@ -14,8 +14,9 @@
     <link href="${contextPath}/static/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
     <!-- Google Fonts -->
-    <link href="${contextPath}/static/font/nunito/nunito.css" >
-    <link href="${contextPath}/static/font/sans-serif/sans-serif.css" >
+    <link href="${contextPath}/static/fonts/open-sans/open-sans.css" rel="stylesheet">
+    <link href="${contextPath}/static/fonts/nunito/nunito.css" rel="stylesheet">
+    <link href="${contextPath}/static/fonts/poppins/poppins.css" rel="stylesheet">
 
     <!-- Vendor CSS Files -->
     <link href="${contextPath}/static/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">

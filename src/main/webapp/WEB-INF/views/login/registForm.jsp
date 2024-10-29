@@ -1,7 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<c:set var="contextPath" value="${pageContext.request.contextPath}"/>
+<c:set var="contextPath" value="${pageContext.request.contextPath}" />
+<!DOCTYPE html>
 <html>
 <head>
     <title>login</title>
@@ -18,21 +19,26 @@
     <link href="${contextPath}/static/vendor/remixicon/remixicon.css" rel="stylesheet">
     <link href="${contextPath}/static/vendor/simple-datatables/style.css" rel="stylesheet">
 
+    <!-- Google Fonts -->
+    <link href="${contextPath}/static/fonts/open-sans/open-sans.css" rel="stylesheet">
+    <link href="${contextPath}/static/fonts/nunito/nunito.css" rel="stylesheet">
+    <link href="${contextPath}/static/fonts/poppins/poppins.css" rel="stylesheet">
+
     <!-- Template Main CSS File -->
     <link href="${contextPath}/static/css/style.css" rel="stylesheet">
 
     <!-- Vendor JS Files -->
-    <script src="${contextPath}/static/vendor/apexcharts/apexcharts.min.js"></script>
-    <script src="${contextPath}/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="${contextPath}/static/vendor/chart.js/chart.umd.js"></script>
-    <script src="${contextPath}/static/vendor/echarts/echarts.min.js"></script>
-    <script src="${contextPath}/static/vendor/quill/quill.js"></script>
-    <script src="${contextPath}/static/vendor/simple-datatables/simple-datatables.js"></script>
-    <script src="${contextPath}/static/vendor/tinymce/tinymce.min.js"></script>
-    <script src="${contextPath}/static/vendor/php-email-form/validate.js"></script>
+    <script src="${contextPath}/static/vendor/apexcharts/apexcharts.min.js" />
+    <script src="${contextPath}/static/vendor/bootstrap/js/bootstrap.bundle.min.js" />
+    <script src="${contextPath}/static/vendor/chart.js/chart.umd.js" />
+    <script src="${contextPath}/static/vendor/echarts/echarts.min.js" />
+    <script src="${contextPath}/static/vendor/quill/quill.js" />
+    <script src="${contextPath}/static/vendor/simple-datatables/simple-datatables.js" />
+    <script src="${contextPath}/static/vendor/tinymce/tinymce.min.js" />
+    <script src="${contextPath}/static/vendor/php-email-form/validate.js" />
 
     <!-- Template Main JS File -->
-    <script src="${contextPath}/static/js/main.js"></script>
+    <script src="${contextPath}/static/js/main.js" />
 
 </head>
 <body>

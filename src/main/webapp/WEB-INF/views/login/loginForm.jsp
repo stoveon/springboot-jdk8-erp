@@ -21,6 +21,11 @@
     <!-- Template Main CSS File -->
     <link href="${contextPath}/static/css/style.css" rel="stylesheet">
 
+    <!-- Google Fonts -->
+    <link href="${contextPath}/static/fonts/open-sans/open-sans.css" rel="stylesheet">
+    <link href="${contextPath}/static/fonts/nunito/nunito.css" rel="stylesheet">
+    <link href="${contextPath}/static/fonts/poppins/poppins.css" rel="stylesheet">
+
     <!-- Vendor JS Files -->
     <script src="${contextPath}/static/vendor/apexcharts/apexcharts.min.js"></script>
     <script src="${contextPath}/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
