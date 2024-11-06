@@ -7,8 +7,8 @@ CREATE TABLE IF NOT EXISTS user_info
     email        VARCHAR(30) COMMENT '이메일',
     address      VARCHAR(200) COMMENT '주소',
     phone_number VARCHAR(12) COMMENT '전화번호',
-    created_at   DATE                  DEFAULT now(),
-    updated_at   DATE                  DEFAULT now()
+    created_at   TIMESTAMP DEFAULT now(),
+    updated_at   TIMESTAMP DEFAULT now()
 
 );
 
@@ -23,6 +23,6 @@ CREATE TABLE IF NOT EXISTS admin_info
     phone_number VARCHAR(12) COMMENT '전화번호',
     department   VARCHAR(20) COMMENT '부서',
     power        SMALLINT     NOT NULL DEFAULT 0 COMMENT '권한 0 or 1',
-    created_at   DATE DEFAULT now(),
-    updated_at   DATE DEFAULT now()
+    created_at   TIMESTAMP DEFAULT now(),
+    updated_at   TIMESTAMP DEFAULT now()
 );
