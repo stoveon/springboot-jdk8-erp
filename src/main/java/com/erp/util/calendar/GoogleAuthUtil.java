@@ -17,6 +17,7 @@ import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.Events;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.ClassPathResource;
 
 import java.io.*;
 import java.util.Collections;
@@ -63,7 +64,7 @@ public class GoogleAuthUtil {
     private static final String CREDENTIALS_FILE_PATH = "client_secret.json";
 
 
-    private static final String CALENDAR_ID = "geenieus";
+    private static final String CALENDAR_ID = "c7e67623b5923e9860b2ec0127c7ce7c3b2c736c185f96cfc002ed67aefedb67@group.calendar.google.com";
 
     /**
      * <pre>
@@ -91,13 +92,17 @@ public class GoogleAuthUtil {
      * @throws IOException
      */
     private static Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT) throws IOException {
-        String filePath = File.separator + "static" + File.separator + CREDENTIALS_FILE_PATH;
-        InputStream in = GoogleAuthUtil.class.getResourceAsStream(filePath);
-        if (in == null) {
+        String filePath = File.separator + "static" + File.separator + "google" + File.separator + CREDENTIALS_FILE_PATH;
+
+
+        ClassPathResource classPathResource = new ClassPathResource(filePath);
+
+        if (!classPathResource.exists()) {
             throw new FileNotFoundException("Resource not found: " + filePath);
         }
+        // Load client secrets.
+        InputStream in = classPathResource.getInputStream();
 
-        // Build flow and trigger user authorization request.
         GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
         GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
                 .setDataStoreFactory(new FileDataStoreFactory(new File(TOKENS_DIRECTORY_PATH)))
@@ -107,7 +112,7 @@ public class GoogleAuthUtil {
         LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8888).build();
         Credential credential = new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
 
-        //returns an authorized Credential object.
+        // returns an authorized Credential object.
         return credential;
     }
 
@@ -117,6 +122,7 @@ public class GoogleAuthUtil {
      *     - 일정정보를 담기 위해 Event 라는 객체를 사용함.
      *     - Event 생성은 크게 제목, 시작시간, 종료시간, 참여자 정보가 필요함.
      * </pre>
+     *
      * @param event
      * @return
      */
@@ -138,6 +144,7 @@ public class GoogleAuthUtil {
      *     구글캘린더에 일정을 삭제하는 메서드
      *     - addEvent 했을 때 구글에서 응답받은 eventKey가 필요함.
      * </pre>
+     *
      * @param eventKey
      */
     public static void delEvent(String eventKey) {
