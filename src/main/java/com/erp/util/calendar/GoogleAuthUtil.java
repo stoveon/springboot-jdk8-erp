@@ -103,7 +103,6 @@ public class GoogleAuthUtil {
     private static Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT, String userId) throws IOException {
         String filePath = File.separator + "static" + File.separator + "google" + File.separator + CREDENTIALS_FILE_PATH;
 
-
         ClassPathResource classPathResource = new ClassPathResource(filePath);
 
         if (!classPathResource.exists()) {
@@ -225,6 +224,5 @@ public class GoogleAuthUtil {
             log.error("{} | {}", e, e.getMessage());
         }
     }
-
 
 }
