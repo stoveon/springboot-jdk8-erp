@@ -22,9 +22,9 @@
     <link href="${contextPath}/static/css/style.css" rel="stylesheet">
 
     <!-- Google Fonts -->
-    <link href="${contextPath}/static/fonts/open-sans/open-sans.css" rel="stylesheet">
-    <link href="${contextPath}/static/fonts/nunito/nunito.css" rel="stylesheet">
-    <link href="${contextPath}/static/fonts/poppins/poppins.css" rel="stylesheet">
+    <link href="${contextPath}/static/font/open-sans/open-sans.css" rel="stylesheet">
+    <link href="${contextPath}/static/font/nunito/nunito.css" rel="stylesheet">
+    <link href="${contextPath}/static/font/poppins/poppins.css" rel="stylesheet">
 
     <!-- Vendor JS Files -->
     <script src="${contextPath}/static/vendor/apexcharts/apexcharts.min.js"></script>
